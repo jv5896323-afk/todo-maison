@@ -17,6 +17,7 @@ body {
   margin: 0 auto;
 }
 
+/* HEADER */
 header {
   text-align: center;
   padding: 30px 0 20px;
@@ -35,6 +36,64 @@ header h1 {
   font-size: 1em;
 }
 
+.back-btn {
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 8px 18px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 500;
+  margin-bottom: 10px;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background: rgba(255,255,255,0.35);
+}
+
+/* HOME : GRILLE DE 4 PIÈCES */
+.rooms-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 10px 0;
+}
+
+.room-card {
+  background: white;
+  border-radius: 16px;
+  padding: 30px 20px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.room-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+}
+
+.room-icon {
+  font-size: 2.8em;
+  margin-bottom: 10px;
+}
+
+.room-name {
+  font-size: 1.15em;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.room-progress {
+  font-size: 0.78em;
+  color: #999;
+}
+
+/* FILTRES */
 .filters {
   display: flex;
   gap: 8px;
@@ -65,6 +124,7 @@ header h1 {
   border-color: white;
 }
 
+/* STATS */
 .stats {
   background: white;
   border-radius: 12px;
@@ -96,6 +156,7 @@ header h1 {
   width: 0%;
 }
 
+/* FORMULAIRE AJOUT */
 .add-task-form {
   display: flex;
   gap: 8px;
@@ -122,7 +183,7 @@ header h1 {
   border-color: #667eea;
 }
 
-#new-room, #new-freq {
+#new-freq {
   padding: 10px 12px;
   border: 2px solid #e9ecef;
   border-radius: 8px;
@@ -152,6 +213,7 @@ header h1 {
   box-shadow: 0 4px 12px rgba(102,126,234,0.4);
 }
 
+/* LISTE DE TÂCHES */
 #task-list {
   display: flex;
   flex-direction: column;
@@ -190,8 +252,8 @@ header h1 {
 }
 
 .task-check {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   border: 2px solid #ccc;
   border-radius: 50%;
   cursor: pointer;
@@ -223,24 +285,14 @@ header h1 {
   word-break: break-word;
 }
 
-.task-meta {
-  display: flex;
-  gap: 8px;
-  margin-top: 4px;
-  flex-wrap: wrap;
-}
-
 .badge {
+  display: inline-block;
   font-size: 0.7em;
   padding: 2px 8px;
   border-radius: 10px;
   font-weight: 600;
   text-transform: capitalize;
-}
-
-.badge-room {
-  background: #e8f0fe;
-  color: #1a73e8;
+  margin-top: 4px;
 }
 
 .badge-quotidien { background: #fce8e6; color: #d93025; }
@@ -264,6 +316,7 @@ header h1 {
   background: #fce8e6;
 }
 
+/* ACTIONS */
 .actions {
   display: flex;
   gap: 10px;
@@ -287,11 +340,6 @@ header h1 {
   background: rgba(255,255,255,0.35);
 }
 
-.action-btn.danger:hover {
-  background: rgba(229,57,53,0.7);
-  border-color: rgba(229,57,53,0.7);
-}
-
 .empty-state {
   text-align: center;
   padding: 40px 20px;
@@ -299,7 +347,21 @@ header h1 {
   font-size: 1.1em;
 }
 
+/* MOBILE */
 @media (max-width: 500px) {
+  .rooms-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .room-card {
+    padding: 24px 14px;
+  }
+  .room-icon {
+    font-size: 2.2em;
+  }
+  .room-name {
+    font-size: 1em;
+  }
   .add-task-form {
     flex-direction: column;
   }

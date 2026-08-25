@@ -8,52 +8,76 @@
 </head>
 <body>
   <div class="container">
-    <header>
-      <h1>Ma Liste de Ménage</h1>
-      <p class="subtitle">Organisez vos tâches quotidiennes</p>
-    </header>
 
-    <div class="filters">
-      <button class="filter-btn active" data-filter="all">Toutes</button>
-      <button class="filter-btn" data-filter="quotidien">Quotidien</button>
-      <button class="filter-btn" data-filter="hebdomadaire">Hebdomadaire</button>
-      <button class="filter-btn" data-filter="mensuel">Mensuel</button>
-    </div>
-
-    <div class="stats">
-      <span id="stats-text">0 / 0 tâches accomplies</span>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progress-fill"></div>
+    <!-- PAGE D'ACCUEIL : 4 pièces -->
+    <div id="home-screen">
+      <header>
+        <h1>Ma Liste de Ménage</h1>
+        <p class="subtitle">Choisissez une pièce</p>
+      </header>
+      <div class="rooms-grid">
+        <div class="room-card" onclick="openRoom('chambre1')">
+          <div class="room-icon">🛏️</div>
+          <div class="room-name">Chambre 1</div>
+          <div class="room-progress" id="progress-chambre1"></div>
+        </div>
+        <div class="room-card" onclick="openRoom('chambre2')">
+          <div class="room-icon">🛏️</div>
+          <div class="room-name">Chambre 2</div>
+          <div class="room-progress" id="progress-chambre2"></div>
+        </div>
+        <div class="room-card" onclick="openRoom('salon')">
+          <div class="room-icon">🛋️</div>
+          <div class="room-name">Salon</div>
+          <div class="room-progress" id="progress-salon"></div>
+        </div>
+        <div class="room-card" onclick="openRoom('cuisine')">
+          <div class="room-icon">🍳</div>
+          <div class="room-name">Cuisine</div>
+          <div class="room-progress" id="progress-cuisine"></div>
+        </div>
       </div>
     </div>
 
-    <div class="add-task-form">
-      <input type="text" id="new-task" placeholder="Ajouter une tâche..." autocomplete="off">
-      <select id="new-room">
-        <option value="cuisine">Cuisine</option>
-        <option value="salon">Salon</option>
-        <option value="chambre">Chambre</option>
-        <option value="salle-de-bain">Salle de bain</option>
-        <option value="entree">Entrée</option>
-        <option value="jardin">Jardin</option>
-        <option value="autre">Autre</option>
-      </select>
-      <select id="new-freq">
-        <option value="quotidien">Quotidien</option>
-        <option value="hebdomadaire">Hebdomadaire</option>
-        <option value="mensuel">Mensuel</option>
-      </select>
-      <button id="add-btn">+</button>
+    <!-- PAGE D'UNE PIÈCE -->
+    <div id="room-screen" style="display:none">
+      <header>
+        <button class="back-btn" onclick="goHome()">&#8592; Retour</button>
+        <h1 id="room-title"></h1>
+      </header>
+
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">Toutes</button>
+        <button class="filter-btn" data-filter="quotidien">Quotidien</button>
+        <button class="filter-btn" data-filter="hebdomadaire">Hebdomadaire</button>
+        <button class="filter-btn" data-filter="mensuel">Mensuel</button>
+      </div>
+
+      <div class="stats">
+        <span id="stats-text">0 / 0 tâches accomplies</span>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="add-task-form">
+        <input type="text" id="new-task" placeholder="Ajouter une tâche..." autocomplete="off">
+        <select id="new-freq">
+          <option value="quotidien">Quotidien</option>
+          <option value="hebdomadaire">Hebdomadaire</option>
+          <option value="mensuel">Mensuel</option>
+        </select>
+        <button id="add-btn">+</button>
+      </div>
+
+      <div id="task-list"></div>
+
+      <div class="actions">
+        <button id="clear-done" class="action-btn">Supprimer les terminées</button>
+      </div>
     </div>
 
-    <div id="task-list"></div>
-
-    <div class="actions">
-      <button id="clear-done" class="action-btn">Supprimer les tâches terminées</button>
-      <button id="reset-all" class="action-btn danger">Tout réinitialiser</button>
-    </div>
   </div>
-
   <script src="app.js"></script>
 </body>
 </html>

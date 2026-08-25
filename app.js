@@ -1,32 +1,41 @@
 const STORAGE_KEY = 'todo-maison-tasks';
 
+const ROOMS = {
+  chambre1: 'Chambre 1',
+  chambre2: 'Chambre 2',
+  salon: 'Salon',
+  cuisine: 'Cuisine',
+};
+
 const DEFAULT_TASKS = [
+  { name: 'Faire le lit', room: 'chambre1', freq: 'quotidien' },
+  { name: 'Dépoussiérer les meubles', room: 'chambre1', freq: 'hebdomadaire' },
+  { name: 'Passer l\'aspirateur', room: 'chambre1', freq: 'hebdomadaire' },
+  { name: 'Changer les draps', room: 'chambre1', freq: 'hebdomadaire' },
+  { name: 'Ranger les vêtements', room: 'chambre1', freq: 'mensuel' },
+
+  { name: 'Faire le lit', room: 'chambre2', freq: 'quotidien' },
+  { name: 'Dépoussiérer les meubles', room: 'chambre2', freq: 'hebdomadaire' },
+  { name: 'Passer l\'aspirateur', room: 'chambre2', freq: 'hebdomadaire' },
+  { name: 'Changer les draps', room: 'chambre2', freq: 'hebdomadaire' },
+  { name: 'Ranger les vêtements', room: 'chambre2', freq: 'mensuel' },
+
+  { name: 'Passer l\'aspirateur', room: 'salon', freq: 'quotidien' },
+  { name: 'Trier le courrier', room: 'salon', freq: 'quotidien' },
+  { name: 'Dépoussiérer', room: 'salon', freq: 'hebdomadaire' },
+  { name: 'Aspirer les canapés', room: 'salon', freq: 'mensuel' },
+  { name: 'Nettoyer les vitres', room: 'salon', freq: 'mensuel' },
+
   { name: 'Faire la vaisselle', room: 'cuisine', freq: 'quotidien' },
   { name: 'Nettoyer le plan de travail', room: 'cuisine', freq: 'quotidien' },
   { name: 'Vider le lave-vaisselle', room: 'cuisine', freq: 'quotidien' },
-  { name: 'Passer l\'aspirateur au salon', room: 'salon', freq: 'quotidien' },
-  { name: 'Trier le courrier', room: 'entree', freq: 'quotidien' },
-  { name: 'Faire le lit', room: 'chambre', freq: 'quotidien' },
-  { name: 'Nettoyer la salle de bain', room: 'salle-de-bain', freq: 'hebdomadaire' },
   { name: 'Passer la serpillère', room: 'cuisine', freq: 'hebdomadaire' },
-  { name: 'Dépoussiérer le salon', room: 'salon', freq: 'hebdomadaire' },
-  { name: 'Changer les draps', room: 'chambre', freq: 'hebdomadaire' },
-  { name: 'Nettoyer les vitres', room: 'salon', freq: 'mensuel' },
+  { name: 'Nettoyer le four', room: 'cuisine', freq: 'mensuel' },
   { name: 'Ranger les placards', room: 'cuisine', freq: 'mensuel' },
-  { name: 'Tuyaux d\'aspirateur / filtres', room: 'autre', freq: 'mensuel' },
 ];
 
-const ROOM_LABELS = {
-  'cuisine': 'Cuisine',
-  'salon': 'Salon',
-  'chambre': 'Chambre',
-  'salle-de-bain': 'Salle de bain',
-  'entree': 'Entrée',
-  'jardin': 'Jardin',
-  'autre': 'Autre',
-};
-
 let tasks = [];
+let currentRoom = null;
 let currentFilter = 'all';
 
 function loadTasks() {
@@ -49,8 +58,44 @@ function saveTasks() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
 }
 
-function addTask(name, room, freq) {
-  tasks.unshift({ id: Date.now(), name, room, freq, done: false });
+function openRoom(room) {
+  currentRoom = room;
+  currentFilter = 'all';
+  document.getElementById('home-screen').style.display = 'none';
+  document.getElementById('room-screen').style.display = 'block';
+  document.getElementById('room-title').textContent = ROOMS[room];
+
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+
+  render();
+}
+
+function goHome() {
+  currentRoom = null;
+  document.getElementById('room-screen').style.display = 'none';
+  document.getElementById('home-screen').style.display = 'block';
+  updateHomeProgress();
+}
+
+function updateHomeProgress() {
+  for (const room of Object.keys(ROOMS)) {
+    const roomTasks = tasks.filter(t => t.room === room);
+    const done = roomTasks.filter(t => t.done).length;
+    const total = roomTasks.length;
+    const el = document.getElementById('progress-' + room);
+    if (el) {
+      if (total === 0) {
+        el.textContent = 'Aucune tâche';
+      } else {
+        el.textContent = done + ' / ' + total + ' accomplies';
+      }
+    }
+  }
+}
+
+function addTask(name, freq) {
+  tasks.unshift({ id: Date.now(), name, room: currentRoom, freq, done: false });
   saveTasks();
   render();
 }
@@ -71,59 +116,46 @@ function deleteTask(id) {
 }
 
 function clearDone() {
-  tasks = tasks.filter(t => !t.done);
-  saveTasks();
-  render();
-}
-
-function resetAll() {
-  if (!confirm('Réinitialiser toutes les tâches ? Les tâches par défaut seront restaurées.')) return;
-  tasks = DEFAULT_TASKS.map((t, i) => ({
-    id: Date.now() + i,
-    name: t.name,
-    room: t.room,
-    freq: t.freq,
-    done: false,
-  }));
+  tasks = tasks.filter(t => !(t.room === currentRoom && t.done));
   saveTasks();
   render();
 }
 
 function updateStats() {
-  const done = tasks.filter(t => t.done).length;
-  const total = tasks.length;
-  document.getElementById('stats-text').textContent = `${done} / ${total} tâches accomplies`;
+  const roomTasks = tasks.filter(t => t.room === currentRoom);
+  const done = roomTasks.filter(t => t.done).length;
+  const total = roomTasks.length;
+  document.getElementById('stats-text').textContent = done + ' / ' + total + ' tâches accomplies';
   const pct = total > 0 ? (done / total) * 100 : 0;
   document.getElementById('progress-fill').style.width = pct + '%';
 }
 
 function render() {
   const list = document.getElementById('task-list');
-  const filtered = currentFilter === 'all'
-    ? tasks
-    : tasks.filter(t => t.freq === currentFilter);
+  let filtered = tasks.filter(t => t.room === currentRoom);
+
+  if (currentFilter !== 'all') {
+    filtered = filtered.filter(t => t.freq === currentFilter);
+  }
 
   if (filtered.length === 0) {
-    list.innerHTML = '<div class="empty-state">Aucune tâche à afficher</div>';
+    list.innerHTML = '<div class="empty-state">Aucune tâche</div>';
     updateStats();
     return;
   }
 
-  list.innerHTML = filtered.map(t => `
-    <div class="task-card ${t.done ? 'done' : ''}">
-      <div class="task-check" onclick="toggleTask(${t.id})">
-        ${t.done ? '&#10003;' : ''}
-      </div>
-      <div class="task-info">
-        <div class="task-name">${escapeHtml(t.name)}</div>
-        <div class="task-meta">
-          <span class="badge badge-room">${ROOM_LABELS[t.room] || t.room}</span>
-          <span class="badge badge-${t.freq}">${t.freq}</span>
-        </div>
-      </div>
-      <button class="task-delete" onclick="deleteTask(${t.id})">&times;</button>
-    </div>
-  `).join('');
+  list.innerHTML = filtered.map(t => {
+    return '<div class="task-card ' + (t.done ? 'done' : '') + '">' +
+      '<div class="task-check" onclick="toggleTask(' + t.id + ')">' +
+      (t.done ? '&#10003;' : '') +
+      '</div>' +
+      '<div class="task-info">' +
+      '<div class="task-name">' + escapeHtml(t.name) + '</div>' +
+      '<span class="badge badge-' + t.freq + '">' + t.freq + '</span>' +
+      '</div>' +
+      '<button class="task-delete" onclick="deleteTask(' + t.id + ')">&times;</button>' +
+      '</div>';
+  }).join('');
 
   updateStats();
 }
@@ -139,9 +171,8 @@ document.getElementById('add-btn').addEventListener('click', () => {
   const input = document.getElementById('new-task');
   const name = input.value.trim();
   if (!name) return;
-  const room = document.getElementById('new-room').value;
   const freq = document.getElementById('new-freq').value;
-  addTask(name, room, freq);
+  addTask(name, freq);
   input.value = '';
   input.focus();
 });
@@ -160,8 +191,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 });
 
 document.getElementById('clear-done').addEventListener('click', clearDone);
-document.getElementById('reset-all').addEventListener('click', resetAll);
 
 // Init
 loadTasks();
-render();
+updateHomeProgress();
