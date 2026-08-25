@@ -59,12 +59,14 @@
 
       <div class="add-task-form">
         <input type="text" id="new-task" placeholder="Ajouter une tâche..." autocomplete="off">
-        <select id="new-freq">
-          <option value="quotidien">Quotidien</option>
-          <option value="hebdomadaire">Hebdomadaire</option>
-          <option value="mensuel">Mensuel</option>
-        </select>
-        <button id="add-btn">+</button>
+        <div class="add-row">
+          <select id="new-freq">
+            <option value="quotidien">Quotidien</option>
+            <option value="hebdomadaire">Hebdomadaire</option>
+            <option value="mensuel">Mensuel</option>
+          </select>
+          <button id="add-btn">+</button>
+        </div>
       </div>
 
       <div id="task-list"></div>

@@ -232,23 +232,30 @@ header h1 {
 }
 
 #add-btn {
-  width: 44px;
-  height: 44px;
-  border: none;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(255,255,255,0.4);
+  background: transparent;
   color: white;
   border-radius: 8px;
-  font-size: 1.5em;
+  font-size: 1.4em;
   cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 #add-btn:hover {
+  background: rgba(255,255,255,0.2);
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(102,126,234,0.4);
+}
+
+.add-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 /* LISTE DE TÂCHES */
