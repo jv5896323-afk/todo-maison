@@ -36,7 +36,9 @@ const DEFAULT_TASKS = [
 
 let tasks = [];
 let currentRoom = null;
-let currentFilter = 'all';
+let activeFilters = new Set(['quotidien', 'hebdomadaire', 'mensuel']);
+
+function loadTasks() {
 
 function loadTasks() {
   const stored = localStorage.getItem(STORAGE_KEY);
@@ -60,14 +62,13 @@ function saveTasks() {
 
 function openRoom(room) {
   currentRoom = room;
-  currentFilter = 'all';
+  activeFilters = new Set(['quotidien', 'hebdomadaire', 'mensuel']);
   document.body.className = 'room-' + room;
   document.getElementById('home-screen').style.display = 'none';
   document.getElementById('room-screen').style.display = 'block';
   document.getElementById('room-title').textContent = ROOMS[room];
 
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.add('active'));
 
   render();
 }
@@ -143,8 +144,8 @@ function render() {
   const list = document.getElementById('task-list');
   let filtered = tasks.filter(t => t.room === currentRoom);
 
-  if (currentFilter !== 'all') {
-    filtered = filtered.filter(t => t.freq === currentFilter);
+  if (activeFilters.size < 3) {
+    filtered = filtered.filter(t => activeFilters.has(t.freq));
   }
 
   if (filtered.length === 0) {
@@ -192,9 +193,13 @@ document.getElementById('new-task').addEventListener('keydown', (e) => {
 
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentFilter = btn.dataset.filter;
+    const filter = btn.dataset.filter;
+    btn.classList.toggle('active');
+    if (activeFilters.has(filter)) {
+      activeFilters.delete(filter);
+    } else {
+      activeFilters.add(filter);
+    }
     render();
   });
 });
