@@ -34,22 +34,18 @@ const DEFAULT_TASKS = [
   { name: 'Ranger les placards', room: 'cuisine', freq: 'mensuel' },
 ];
 
-let tasks = [];
-let currentRoom = null;
-let activeFilters = new Set(['quotidien', 'hebdomadaire', 'mensuel']);
+var tasks = [];
+var currentRoom = null;
+var activeFilters = { quotidien: true, hebdomadaire: true, mensuel: true };
 
 function loadTasks() {
-  const stored = localStorage.getItem(STORAGE_KEY);
+  var stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
     tasks = JSON.parse(stored);
   } else {
-    tasks = DEFAULT_TASKS.map((t, i) => ({
-      id: Date.now() + i,
-      name: t.name,
-      room: t.room,
-      freq: t.freq,
-      done: false,
-    }));
+    tasks = DEFAULT_TASKS.map(function(t, i) {
+      return { id: Date.now() + i, name: t.name, room: t.room, freq: t.freq, done: false };
+    });
     saveTasks();
   }
 }
@@ -60,14 +56,12 @@ function saveTasks() {
 
 function openRoom(room) {
   currentRoom = room;
-  activeFilters = new Set(['quotidien', 'hebdomadaire', 'mensuel']);
+  activeFilters = { quotidien: true, hebdomadaire: true, mensuel: true };
   document.body.className = 'room-' + room;
   document.getElementById('home-screen').style.display = 'none';
   document.getElementById('room-screen').style.display = 'block';
   document.getElementById('room-title').textContent = ROOMS[room];
-
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.add('active'));
-
+  syncFilterButtons();
   render();
 }
 
@@ -79,30 +73,43 @@ function goHome() {
   updateHomeProgress();
 }
 
-function updateHomeProgress() {
-  for (const room of Object.keys(ROOMS)) {
-    const roomTasks = tasks.filter(t => t.room === room);
-    const done = roomTasks.filter(t => t.done).length;
-    const total = roomTasks.length;
-    const el = document.getElementById('progress-' + room);
-    if (el) {
-      if (total === 0) {
-        el.textContent = 'Aucune tâche';
-      } else {
-        el.textContent = done + ' / ' + total + ' accomplies';
-      }
+function syncFilterButtons() {
+  document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    var f = btn.getAttribute('data-filter');
+    if (activeFilters[f]) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
     }
-  }
+  });
+}
+
+function toggleFilter(freq) {
+  activeFilters[freq] = !activeFilters[freq];
+  syncFilterButtons();
+  render();
+}
+
+function updateHomeProgress() {
+  Object.keys(ROOMS).forEach(function(room) {
+    var roomTasks = tasks.filter(function(t) { return t.room === room; });
+    var done = roomTasks.filter(function(t) { return t.done; }).length;
+    var total = roomTasks.length;
+    var el = document.getElementById('progress-' + room);
+    if (el) {
+      el.textContent = total === 0 ? 'Aucune tâche' : done + ' / ' + total + ' accomplies';
+    }
+  });
 }
 
 function addTask(name, freq) {
-  tasks.unshift({ id: Date.now(), name, room: currentRoom, freq, done: false });
+  tasks.unshift({ id: Date.now(), name: name, room: currentRoom, freq: freq, done: false });
   saveTasks();
   render();
 }
 
 function toggleTask(id) {
-  const task = tasks.find(t => t.id === id);
+  var task = tasks.find(function(t) { return t.id === id; });
   if (task) {
     task.done = !task.done;
     saveTasks();
@@ -111,40 +118,34 @@ function toggleTask(id) {
 }
 
 function deleteTask(id) {
-  tasks = tasks.filter(t => t.id !== id);
+  tasks = tasks.filter(function(t) { return t.id !== id; });
   saveTasks();
   render();
 }
 
 function resetAll() {
   if (!confirm('Réinitialiser toutes les tâches ?')) return;
-  tasks = DEFAULT_TASKS.map((t, i) => ({
-    id: Date.now() + i,
-    name: t.name,
-    room: t.room,
-    freq: t.freq,
-    done: false,
-  }));
+  tasks = DEFAULT_TASKS.map(function(t, i) {
+    return { id: Date.now() + i, name: t.name, room: t.room, freq: t.freq, done: false };
+  });
   saveTasks();
   render();
 }
 
 function updateStats() {
-  const roomTasks = tasks.filter(t => t.room === currentRoom);
-  const done = roomTasks.filter(t => t.done).length;
-  const total = roomTasks.length;
+  var roomTasks = tasks.filter(function(t) { return t.room === currentRoom; });
+  var done = roomTasks.filter(function(t) { return t.done; }).length;
+  var total = roomTasks.length;
   document.getElementById('stats-text').textContent = done + ' / ' + total + ' tâches accomplies';
-  const pct = total > 0 ? (done / total) * 100 : 0;
+  var pct = total > 0 ? (done / total) * 100 : 0;
   document.getElementById('progress-fill').style.width = pct + '%';
 }
 
 function render() {
-  const list = document.getElementById('task-list');
-  let filtered = tasks.filter(t => t.room === currentRoom);
+  var list = document.getElementById('task-list');
+  var filtered = tasks.filter(function(t) { return t.room === currentRoom; });
 
-  if (activeFilters.size < 3) {
-    filtered = filtered.filter(t => activeFilters.has(t.freq));
-  }
+  filtered = filtered.filter(function(t) { return activeFilters[t.freq]; });
 
   if (filtered.length === 0) {
     list.innerHTML = '<div class="empty-state">Aucune tâche</div>';
@@ -152,8 +153,9 @@ function render() {
     return;
   }
 
-  list.innerHTML = filtered.map(t => {
-    return '<div class="task-card ' + (t.done ? 'done' : '') + '">' +
+  var html = '';
+  filtered.forEach(function(t) {
+    html += '<div class="task-card ' + (t.done ? 'done' : '') + '">' +
       '<div class="task-check" onclick="toggleTask(' + t.id + ')">' +
       (t.done ? '&#10003;' : '') +
       '</div>' +
@@ -163,47 +165,35 @@ function render() {
       '</div>' +
       '<button class="task-delete" onclick="deleteTask(' + t.id + ')">&times;</button>' +
       '</div>';
-  }).join('');
+  });
+  list.innerHTML = html;
 
   updateStats();
 }
 
 function escapeHtml(str) {
-  const div = document.createElement('div');
+  var div = document.createElement('div');
   div.textContent = str;
   return div.innerHTML;
 }
 
-// Event listeners
-document.getElementById('add-btn').addEventListener('click', () => {
-  const input = document.getElementById('new-task');
-  const name = input.value.trim();
-  if (!name) return;
-  const freq = document.getElementById('new-freq').value;
-  addTask(name, freq);
-  input.value = '';
-  input.focus();
-});
-
-document.getElementById('new-task').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') document.getElementById('add-btn').click();
-});
-
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const filter = btn.dataset.filter;
-    btn.classList.toggle('active');
-    if (activeFilters.has(filter)) {
-      activeFilters.delete(filter);
-    } else {
-      activeFilters.add(filter);
-    }
-    render();
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('add-btn').addEventListener('click', function() {
+    var input = document.getElementById('new-task');
+    var name = input.value.trim();
+    if (!name) return;
+    var freq = document.getElementById('new-freq').value;
+    addTask(name, freq);
+    input.value = '';
+    input.focus();
   });
+
+  document.getElementById('new-task').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('add-btn').click();
+  });
+
+  document.getElementById('reset-all').addEventListener('click', resetAll);
+
+  loadTasks();
+  updateHomeProgress();
 });
-
-document.getElementById('reset-all').addEventListener('click', resetAll);
-
-// Init
-loadTasks();
-updateHomeProgress();
