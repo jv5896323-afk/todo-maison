@@ -53,6 +53,7 @@ var activeFilters = { quotidien: true, hebdomadaire: true, mensuel: true };
 function loadTasks() {
   dbRef.once('value', function(snapshot) {
     var data = snapshot.val();
+    console.log('Firebase data:', data);
     if (data && data.tasks) {
       tasks = data.tasks;
     } else {
@@ -62,11 +63,18 @@ function loadTasks() {
       saveTasks();
     }
     updateHomeProgress();
+  }, function(error) {
+    console.error('Firebase read error:', error);
   });
 }
 
 function saveTasks() {
-  dbRef.set({ tasks: tasks });
+  console.log('Saving to Firebase:', tasks);
+  dbRef.set({ tasks: tasks }).then(function() {
+    console.log('Save OK');
+  }).catch(function(error) {
+    console.error('Firebase write error:', error);
+  });
 }
 
 function openRoom(room) {
