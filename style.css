@@ -202,22 +202,22 @@ header h1 {
 /* FORMULAIRE AJOUT */
 .add-task-form {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   margin-bottom: 20px;
   background: white;
-  padding: 12px;
+  padding: 10px;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  flex-wrap: wrap;
+  align-items: center;
 }
 
 #new-task {
   flex: 1;
-  min-width: 150px;
-  padding: 10px 14px;
+  min-width: 0;
+  padding: 10px 12px;
   border: 2px solid #e9ecef;
   border-radius: 8px;
-  font-size: 0.95em;
+  font-size: 0.9em;
   outline: none;
   transition: border-color 0.2s;
 }
@@ -227,23 +227,24 @@ header h1 {
 }
 
 #new-freq {
-  padding: 10px 12px;
+  padding: 8px 8px;
   border: 2px solid #e9ecef;
   border-radius: 8px;
-  font-size: 0.9em;
+  font-size: 0.8em;
   background: white;
   outline: none;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 #add-btn {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border: 2px solid rgba(255,255,255,0.4);
   background: transparent;
   color: white;
   border-radius: 8px;
-  font-size: 1.4em;
+  font-size: 1.3em;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
@@ -428,10 +429,17 @@ header h1 {
     font-size: 1.5em;
   }
   .add-task-form {
-    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 8px;
+  }
+  #new-freq {
+    font-size: 0.72em;
+    padding: 6px 6px;
   }
   #add-btn {
-    width: 100%;
+    width: 34px;
+    height: 34px;
+    font-size: 1.2em;
   }
   .filters {
     gap: 6px;
