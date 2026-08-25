@@ -11,13 +11,15 @@ body {
   padding: 20px;
   color: #333;
   transition: background 0.4s ease;
+  -webkit-background-attachment: fixed;
+  background-attachment: fixed;
 }
 
-body.room-cuisine { background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%); }
-body.room-chambre1 { background: linear-gradient(135deg, #1a237e 0%, #283593 100%); }
-body.room-chambre1 h1, body.room-chambre1 .subtitle { color: white; }
-body.room-chambre2 { background: linear-gradient(135deg, #fff9c4 0%, #ffee58 100%); }
-body.room-salon { background: linear-gradient(135deg, #212121 0%, #424242 100%); }
+body.room-cuisine { background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%) !important; }
+body.room-chambre1 { background: linear-gradient(135deg, #1a237e 0%, #283593 100%) !important; }
+body.room-chambre1 h1, body.room-chambre1 .subtitle, body.room-chambre1 #stats-text { color: white; }
+body.room-chambre2 { background: linear-gradient(135deg, #fff9c4 0%, #ffee58 100%) !important; }
+body.room-salon { background: linear-gradient(135deg, #212121 0%, #424242 100%) !important; }
 
 .container {
   max-width: 650px;
@@ -63,6 +65,7 @@ header h1 {
   display: flex;
   justify-content: flex-start;
   padding-top: 30px;
+  padding-bottom: 20px;
 }
 
 /* HOME : GRILLE DE 4 PIÈCES */
@@ -352,6 +355,11 @@ header h1 {
   background: rgba(255,255,255,0.35);
 }
 
+.action-btn.danger:hover {
+  background: rgba(229,57,53,0.7);
+  border-color: rgba(229,57,53,0.7);
+}
+
 .empty-state {
   text-align: center;
   padding: 40px 20px;
@@ -360,13 +368,17 @@ header h1 {
 }
 
 /* MOBILE */
-@media (max-width: 500px) {
+@media (max-width: 600px) {
+  body {
+    padding: 14px;
+  }
   .rooms-grid {
     grid-template-columns: 1fr 1fr;
     gap: 12px;
   }
   .room-card {
     padding: 24px 14px;
+    border-radius: 14px;
   }
   .room-icon {
     font-size: 2.2em;
@@ -374,16 +386,38 @@ header h1 {
   .room-name {
     font-size: 1em;
   }
+  header {
+    padding: 20px 0 14px;
+  }
+  header h1 {
+    font-size: 1.5em;
+  }
   .add-task-form {
     flex-direction: column;
   }
   #add-btn {
     width: 100%;
   }
-  header h1 {
-    font-size: 1.5em;
+  .filters {
+    gap: 6px;
+  }
+  .filter-btn {
+    padding: 6px 14px;
+    font-size: 0.82em;
+  }
+  .task-card {
+    padding: 12px 14px;
+  }
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .action-btn {
+    width: 100%;
+    text-align: center;
   }
   .bottom-bar {
     padding-top: 40px;
+    padding-bottom: 30px;
   }
 }
