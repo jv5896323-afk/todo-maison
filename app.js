@@ -1,13 +1,25 @@
-const STORAGE_KEY = 'todo-maison-tasks';
+var firebaseConfig = {
+  apiKey: "REMPLACER_PAR_TON_API_KEY",
+  authDomain: "REMPLACER_PAR_TON_PROJET.firebaseapp.com",
+  databaseURL: "https://REMPLACER_PAR_TON_PROJET-default-rtdb.firebaseio.com",
+  projectId: "REMPLACER_PAR_TON_PROJET",
+  storageBucket: "REMPLACER_PAR_TON_PROJET.appspot.com",
+  messagingSenderId: "REMPLACER_PAR_TON_ID",
+  appId: "REMPLACER_PAR_TON_APP_ID"
+};
 
-const ROOMS = {
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+var dbRef = db.ref('todo-maison');
+
+var ROOMS = {
   chambre1: 'Chambre 1',
   chambre2: 'Chambre 2',
   salon: 'Salon',
   cuisine: 'Cuisine',
 };
 
-const DEFAULT_TASKS = [
+var DEFAULT_TASKS = [
   { name: 'Faire le lit', room: 'chambre1', freq: 'quotidien' },
   { name: 'Dépoussiérer les meubles', room: 'chambre1', freq: 'hebdomadaire' },
   { name: 'Passer l\'aspirateur', room: 'chambre1', freq: 'hebdomadaire' },
@@ -39,19 +51,22 @@ var currentRoom = null;
 var activeFilters = { quotidien: true, hebdomadaire: true, mensuel: true };
 
 function loadTasks() {
-  var stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) {
-    tasks = JSON.parse(stored);
-  } else {
-    tasks = DEFAULT_TASKS.map(function(t, i) {
-      return { id: Date.now() + i, name: t.name, room: t.room, freq: t.freq, done: false };
-    });
-    saveTasks();
-  }
+  dbRef.once('value', function(snapshot) {
+    var data = snapshot.val();
+    if (data && data.tasks) {
+      tasks = data.tasks;
+    } else {
+      tasks = DEFAULT_TASKS.map(function(t, i) {
+        return { id: Date.now() + i, name: t.name, room: t.room, freq: t.freq, done: false };
+      });
+      saveTasks();
+    }
+    updateHomeProgress();
+  });
 }
 
 function saveTasks() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+  dbRef.set({ tasks: tasks });
 }
 
 function openRoom(room) {
@@ -144,7 +159,6 @@ function updateStats() {
 function render() {
   var list = document.getElementById('task-list');
   var filtered = tasks.filter(function(t) { return t.room === currentRoom; });
-
   filtered = filtered.filter(function(t) { return activeFilters[t.freq]; });
 
   if (filtered.length === 0) {
@@ -167,7 +181,6 @@ function render() {
       '</div>';
   });
   list.innerHTML = html;
-
   updateStats();
 }
 
@@ -195,5 +208,4 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('reset-all').addEventListener('click', resetAll);
 
   loadTasks();
-  updateHomeProgress();
 });
