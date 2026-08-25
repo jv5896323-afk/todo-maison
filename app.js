@@ -39,8 +39,6 @@ let currentRoom = null;
 let activeFilters = new Set(['quotidien', 'hebdomadaire', 'mensuel']);
 
 function loadTasks() {
-
-function loadTasks() {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
     tasks = JSON.parse(stored);
