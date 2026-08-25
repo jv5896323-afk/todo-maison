@@ -61,6 +61,7 @@ function saveTasks() {
 function openRoom(room) {
   currentRoom = room;
   currentFilter = 'all';
+  document.body.className = 'room-' + room;
   document.getElementById('home-screen').style.display = 'none';
   document.getElementById('room-screen').style.display = 'block';
   document.getElementById('room-title').textContent = ROOMS[room];
@@ -73,6 +74,7 @@ function openRoom(room) {
 
 function goHome() {
   currentRoom = null;
+  document.body.className = '';
   document.getElementById('room-screen').style.display = 'none';
   document.getElementById('home-screen').style.display = 'block';
   updateHomeProgress();

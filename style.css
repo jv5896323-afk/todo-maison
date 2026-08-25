@@ -10,7 +10,14 @@ body {
   min-height: 100vh;
   padding: 20px;
   color: #333;
+  transition: background 0.4s ease;
 }
+
+body.room-cuisine { background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%); }
+body.room-chambre1 { background: linear-gradient(135deg, #1a237e 0%, #283593 100%); }
+body.room-chambre1 h1, body.room-chambre1 .subtitle { color: white; }
+body.room-chambre2 { background: linear-gradient(135deg, #fff9c4 0%, #ffee58 100%); }
+body.room-salon { background: linear-gradient(135deg, #212121 0%, #424242 100%); }
 
 .container {
   max-width: 650px;
