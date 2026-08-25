@@ -115,8 +115,15 @@ function deleteTask(id) {
   render();
 }
 
-function clearDone() {
-  tasks = tasks.filter(t => !(t.room === currentRoom && t.done));
+function resetAll() {
+  if (!confirm('Réinitialiser toutes les tâches ?')) return;
+  tasks = DEFAULT_TASKS.map((t, i) => ({
+    id: Date.now() + i,
+    name: t.name,
+    room: t.room,
+    freq: t.freq,
+    done: false,
+  }));
   saveTasks();
   render();
 }
@@ -190,7 +197,7 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   });
 });
 
-document.getElementById('clear-done').addEventListener('click', clearDone);
+document.getElementById('reset-all').addEventListener('click', resetAll);
 
 // Init
 loadTasks();
