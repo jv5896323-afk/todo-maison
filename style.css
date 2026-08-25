@@ -35,14 +35,17 @@ header {
 
 .room-header {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .room-header h1 {
   white-space: nowrap;
+  font-size: 1.1em;
+  font-weight: 700;
+  margin: 0;
 }
 
 header h1 {
@@ -123,28 +126,30 @@ header h1 {
 /* FILTRES */
 .filters {
   display: flex;
-  gap: 8px;
+  gap: 5px;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .filters-label {
-  font-size: 0.85em;
+  font-size: 0.72em;
   opacity: 0.85;
   white-space: nowrap;
+  display: none;
 }
 
 .filter-btn {
-  padding: 8px 18px;
+  padding: 6px 12px;
   border: 2px solid rgba(255,255,255,0.4);
   background: rgba(255,255,255,0.15);
   color: white;
   border-radius: 25px;
   cursor: pointer;
-  font-size: 0.9em;
+  font-size: 0.75em;
   font-weight: 500;
   transition: all 0.2s;
+  white-space: nowrap;
 }
 
 .filter-btn:hover {
