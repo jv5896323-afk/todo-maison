@@ -1,11 +1,11 @@
 var firebaseConfig = {
-  apiKey: "REMPLACER_PAR_TON_API_KEY",
-  authDomain: "REMPLACER_PAR_TON_PROJET.firebaseapp.com",
-  databaseURL: "https://REMPLACER_PAR_TON_PROJET-default-rtdb.firebaseio.com",
-  projectId: "REMPLACER_PAR_TON_PROJET",
-  storageBucket: "REMPLACER_PAR_TON_PROJET.appspot.com",
-  messagingSenderId: "REMPLACER_PAR_TON_ID",
-  appId: "REMPLACER_PAR_TON_APP_ID"
+  apiKey: "AIzaSyCxFRp6TvZVIFWtq8HcG4ovo_YX9sN8kxs",
+  authDomain: "todo-maison.firebaseapp.com",
+  databaseURL: "https://todo-maison-default-rtdb.firebaseio.com",
+  projectId: "todo-maison",
+  storageBucket: "todo-maison.firebasestorage.app",
+  messagingSenderId: "933123023742",
+  appId: "1:933123023742:web:5798a7069dae23b26a092f"
 };
 
 firebase.initializeApp(firebaseConfig);
