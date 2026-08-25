@@ -383,4 +383,7 @@ header h1 {
   header h1 {
     font-size: 1.5em;
   }
+  .bottom-bar {
+    padding-top: 40px;
+  }
 }
