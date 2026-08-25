@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ma Liste de Ménage</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Ma Liste de Ménage</h1>
+      <p class="subtitle">Organisez vos tâches quotidiennes</p>
+    </header>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Toutes</button>
+      <button class="filter-btn" data-filter="quotidien">Quotidien</button>
+      <button class="filter-btn" data-filter="hebdomadaire">Hebdomadaire</button>
+      <button class="filter-btn" data-filter="mensuel">Mensuel</button>
+    </div>
+
+    <div class="stats">
+      <span id="stats-text">0 / 0 tâches accomplies</span>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="add-task-form">
+      <input type="text" id="new-task" placeholder="Ajouter une tâche..." autocomplete="off">
+      <select id="new-room">
+        <option value="cuisine">Cuisine</option>
+        <option value="salon">Salon</option>
+        <option value="chambre">Chambre</option>
+        <option value="salle-de-bain">Salle de bain</option>
+        <option value="entree">Entrée</option>
+        <option value="jardin">Jardin</option>
+        <option value="autre">Autre</option>
+      </select>
+      <select id="new-freq">
+        <option value="quotidien">Quotidien</option>
+        <option value="hebdomadaire">Hebdomadaire</option>
+        <option value="mensuel">Mensuel</option>
+      </select>
+      <button id="add-btn">+</button>
+    </div>
+
+    <div id="task-list"></div>
+
+    <div class="actions">
+      <button id="clear-done" class="action-btn">Supprimer les tâches terminées</button>
+      <button id="reset-all" class="action-btn danger">Tout réinitialiser</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
