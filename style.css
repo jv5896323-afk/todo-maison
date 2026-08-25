@@ -21,6 +21,11 @@ body.room-chambre1 h1, body.room-chambre1 .subtitle, body.room-chambre1 #stats-t
 body.room-chambre2 { background: linear-gradient(135deg, #f9a825 0%, #f57f17 100%) !important; }
 body.room-salon { background: linear-gradient(135deg, #212121 0%, #424242 100%) !important; }
 
+body.room-cuisine #add-btn { border-color: rgba(244,143,177,0.6); color: #c2185b; }
+body.room-chambre1 #add-btn { border-color: rgba(40,53,147,0.6); color: #1a237e; }
+body.room-chambre2 #add-btn { border-color: rgba(245,127,23,0.6); color: #e65100; }
+body.room-salon #add-btn { border-color: rgba(255,255,255,0.3); color: white; }
+
 .container {
   max-width: 650px;
   margin: 0 auto;
