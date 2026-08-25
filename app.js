@@ -1,7 +1,7 @@
 var firebaseConfig = {
   apiKey: "AIzaSyCxFRp6TvZVIFWtq8HcG4ovo_YX9sN8kxs",
   authDomain: "todo-maison.firebaseapp.com",
-  databaseURL: "https://todo-maison-default-rtdb.firebaseio.com",
+  databaseURL: "https://todo-maison-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "todo-maison",
   storageBucket: "todo-maison.firebasestorage.app",
   messagingSenderId: "933123023742",
